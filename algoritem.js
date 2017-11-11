@@ -1,66 +1,144 @@
-var a = [[],[]];
-var stevilo_crnih = prompt("Vnesite stevilo crnih");
-var stevilo_belih = prompt("Vnesite stevilo belih");
-var skatla;
-
+let box1 = [];
+let box2 = [];
+let box01 = [];
+let box02 = [];
+let polje = [[],[]];
+//***************************************************************
 function setup(){
-  createCanvas(windowWidth,windowHeight);
- skatla = new Skatla();
- skatla.prikazi();
-  var negro = new fizol("crn");
-  var bianco = new fizol("bel");
-  for(var i = 0; i < stevilo_crnih; i++){
-  a[0].push(negro);
-}
-  for(var i = 0; i < stevilo_belih; i++){
-  a[1].push(bianco);
-  }
-  console.log(a.join(","));
-}
-
-
-
-function draw(){
+  createCanvas(640,480);
   background(0);
-    skatla.prikazi();
+  start();
+  $("#gumb").click(function(){
+    razvrsti()});
+  $("#razvrsti").click(function(){
+    mix();
+  $("#onfield").click(function(){
+    onfield();
+  });
+  $("#tobox").click(function(){
+    tobox();
+  })
 
-    skatla.zasveti();
-    skatla.spremeni();
+  })
+}
+//**********************************************************************
+function draw(){
 
+  display();
 }
 
-function Skatla(){
-  this.widx = 400;
-  this.widy = 300;
-  this.movex = 0;
-  this.movey = 0;
-  this.bck = color(0,255,30);
+//**********************************************************
+function Fizol(color){
+  this.color = color;
+}
 
-  this.zasveti = function(){
-    if(mouseIsPressed && this.movex < mouseX && (this.movex + this. widx)/2 >= mouseX && (this.movey < mouseY && this.movey + this.widy)/2 >= mouseY){
-      this.bck = color(50);
-    } else this.bck = color(255);
+function start(){
+  const wh = prompt("koliko belih");
+  const bl = prompt("koliko crnih");
+  for(let i = 0; i < wh; i++){
+    let f = new Fizol("white");
+    box1.push(f);
+    console.log(box1[i].color);
   }
-  this.napolju = function(){
-    if(mouseIsPressed && this.movex < mouseX && this.movex + this. widx >= mouseX && this.movey < mouseY && this.movey + this.widy >= mouseY){
-      return true;
-    } else {
-      return false;
-    }
-  };
-  this.spremeni = function(){
-    if(this.napolju()){q 
-      this.movex = mouseX;
-      this.movey = mouseY;
-    }
-  };
-  this.prikazi = function(){
-    fill(this.bck);
-    rectMode(CENTER);
-    rect(this.movex,this.movey,this.widx,this.widy);
-  };
-
+  for(let i = 0; i < bl; i++){
+    let b = new Fizol("black");
+    box2.push(b);
+    console.log(box2[i].color);
+  }
 }
-function fizol(barva){
-  this.barva = barva;
+
+function razvrsti(){
+  for(let i = 0; i < (box1.length)/2; i++){
+    box01.push(box1[2*i]);
+    box02.push(box1[2*i+1]);
+    }
+box1.splice(0,box1.length);
+
+  for(let i = 0; i < (box2.length)/2; i++){
+  box01.push(box2[2*i]);
+  box02.push(box2[2*i+1]);
+}
+box2.splice(0,box2.length);
+  console.log("box01");
+  box01.forEach(function(current){
+    console.log(current.color);
+  });
+  console.log("box02");
+  box02.forEach(function(currentb){
+    console.log(currentb.color);
+  });
+}
+
+function mix(){
+  function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+          let j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+      }
+  }
+
+  shuffleArray(box01);
+  shuffleArray(box02);
+  console.log("zacetek");
+  box01.forEach(function(cur){
+    console.log(cur.color);
+  });
+}
+
+function onfield(){
+  polje[0] = box01;
+  polje[1] = box02;
+  box01 = [];
+  box02 = [];
+//ne pozabit pri tobox spicat box01 in box02
+}
+
+function tobox(){
+  for(let i = 0; i < polje[0].length; i++){
+  box01.push(polje[0][2*i]);
+  box02.push(polje[0][2*i+1]);
+  }
+  polje[0] = [];
+  for(let i = 0; i <= polje[1].length; i++){
+  box01.push(polje[1][i*2]);
+  box02.push(polje[1][i*2+1]);
+
+  }
+  console.log("tobox deluje");
+}
+
+function display(){
+  function nic(){
+    let x = width/3;
+    let y = 10;
+  for(let i = 0; i < polje[0].length; i++){
+    if(polje[0][i].color == "white"){
+      fill(255);
+      ellipse(x,y, 30,20);
+    }
+    if(polje[1][i].color == "black"){
+      fill(0,0,125);
+      ellipse(x,y, 30,20);
+    }
+    y = y + 30;
+  }
+  console.log("funkcija nic klicana");
+}
+  function ena(){
+    let x = width/3*2;
+    let y = 10;
+  for(let i = 0; i < polje[1].length; i++){
+
+  if(polje[0][i].color == "white"){
+    fill(255);
+    ellipse(x,y, 30,20);
+  }
+  if(polje[1][i].color == "black"){
+    fill(0,0,125);
+    ellipse(x,y, 30,20);
+  }
+  y = y + 30;
+}
+}
+  console.log("funkcija ena klicana");
 }
