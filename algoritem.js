@@ -3,6 +3,7 @@ let box2 = [];
 let box01 = [];
 let box02 = [];
 let polje = [[],[]];
+let a = false
 //***************************************************************
 function setup(){
   createCanvas(640,480);
@@ -12,21 +13,22 @@ function setup(){
     razvrsti()});
   $("#razvrsti").click(function(){
     mix();
+      });
   $("#onfield").click(function(){
     onfield();
-  });
+    a = true;
+     $(this).attr('disabled','disabled');
+        });
   $("#tobox").click(function(){
     tobox();
-  })
-
-  })
+    $("#onfield").removeAttr("disabled");
+  });
 }
 //**********************************************************************
 function draw(){
     background(0);
-if(polje[0] || polje[1]){
-  display();
-}
+  display(box01,box02, 20,width-20);
+  display(polje[0],polje[1],width/3,width/3*2);
 }
 
 //**********************************************************
@@ -98,51 +100,54 @@ function onfield(){
 function tobox(){
   for(let i = 0; i < polje[0].length/2; i++){
   box01.push(polje[0][2*i]);
-  box02.push(polje[0][2*i+1]);
-  }
-
-  polje[0] = [];
-  for(let i = 0; i < polje[1].length/2; i++){
   box01.push(polje[1][i*2]);
+  box02.push(polje[0][2*i+1]);
   box02.push(polje[1][i*2+1]);
   }
+
   polje[0] = [];
   polje[1] = [];
   console.log("tobox deluje");
 }
 
-function display(){
-  function nic(){
-    let x = width/3;
+function display(whatone,whattwo, x1, x2){
+  function nic(whatone,x1){
+    let x = x1
     let y = 10;
-  for(let i = 0; i < polje[0].length; i++){
-    if(polje[0][i].color == "white"){
+  for(let i = 0; i < whatone.length; i++){
+    if(whatone[i].color == "white"){
       fill(255);
       ellipse(x,y, 30,20);
     }
-    if(polje[0][i].color == "black"){
+    if(whatone[i].color == "black"){
       fill(0,0,125);
       ellipse(x,y, 30,20);
     }
     y = y + 30;
   }
 }
-  function ena(){
-    let x = width/3*2;
+  function ena(whattwo,x2){
+    let x = x2;
     let y = 10;
-  for(let i = 0; i < polje[1].length; i++){
+  for(let i = 0; i < whattwo.length; i++){
 
-  if(polje[1][i].color == "white"){
+  if(whattwo[i].color == "white"){
     fill(255);
     ellipse(x,y, 30,20);
   }
-  if(polje[1][i].color == "black"){
+  if(whattwo[i].color == "black"){
     fill(0,0,125);
     ellipse(x,y, 30,20);
   }
   y = y + 30;
 }
 }
-  nic();
-  ena();
+nic(whatone,x1);
+if(whattwo){
+  ena(whattwo,x2);
+}
+}
+
+function showbox(){
+
 }
